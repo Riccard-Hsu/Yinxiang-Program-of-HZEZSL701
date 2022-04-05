@@ -1,0 +1,25 @@
+//#pragma warning(disable:4996)
+#include <iostream>
+#include <algorithm>
+#include <string.h>
+#define mod 1000000007
+using namespace std;
+int a[100010] = { 0 };
+int main()
+{
+	memset(a, 0, sizeof(a));
+	int n;
+	cin >> n;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> a[i];
+	}
+	sort(a + 1, a + n + 1);
+	long long sum = 0;
+	for (int i = 1; i <= n; i++)
+	{
+		sum += ((a[i] % mod) * (n - i + 1)) % mod;
+	}
+	cout << sum << endl;
+	return 0;
+}

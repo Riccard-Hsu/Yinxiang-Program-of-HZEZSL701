@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+#define LL long long
+#define RG register
+using namespace std;
+const int N = 200010, INF = 1e9;
+struct rec {
+    int op, x, y, z;
+}q[N<<1], lq[N<<1], rq[N<<1];
+int n, m, tot, c[N], ans[N];
+#define lowbit(x) (x&(-x))
+void add(int x, int v) {
+    while (x <= n) c[x] += v, x += lowbit(x);
+    return ;
+}
+int sum(int x) {
+    int res = 0;
+    while (x > 0) res += c[x], x -= lowbit(x);
+    return res;
+}
+int X[N], cnt;
+inline int gi() {
+    RG int x = 0; RG char c = getchar(); bool f = 0;
+    while (c != '-' && (c < '0' || c > '9')) c = getchar();
+    if (c == '-') c = getchar(), f = 1;
+    while (c >= '0' && c <= '9') x = x*10+c-'0', c = getchar();
+    return f ? -x : x;
+}
+ 
+void div(int l, int r, int st, int ed) {
+    if (st > ed) return ;
+    if (l == r) {
+        for (int i = st; i <= ed; i++)
+            if (q[i].op) ans[q[i].op] = l;
+        return ;
+    }
+    int mid = (l + r) >> 1;
+    int lt = 0, rt = 0;
+    for (int i = st; i <= ed; i++) {
+        if (!q[i].op) {
+            if (q[i].y <= mid) add(q[i].x, 1), lq[++lt] = q[i];
+            else rq[++rt] = q[i];
+        }
+        else {
+            int res = sum(q[i].y) - sum(q[i].x-1);
+            if (res >= q[i].z) lq[++lt] = q[i];
+            else q[i].z -= res,rq[++rt] = q[i];
+        }
+    }
+    for (int i = st; i <= ed; i++)
+        if (!q[i].op && q[i].y <= mid) add(q[i].x, -1);
+    for (int i = 1; i <= lt; i++) q[st+i-1] = lq[i];
+    for (int i = 1; i <= rt; i++) q[st+lt+i-1] = rq[i];
+    div(l, mid, st, st+lt-1);
+    div(mid+1, r, st+lt, ed);
+    return ;
+}
+ 
+int main() {
+    n = gi(); m = gi();
+    for (int i = 1; i <= n; i++) {
+        q[++tot].op = 0, q[tot].x = i, X[++cnt] = q[tot].y = gi();
+    }
+    sort(X+1, X+1+cnt); cnt = unique(X+1, X+cnt+1)-X-1;
+    for (int i = 1; i <= n; i++)
+        q[i].y = lower_bound(X+1, X+cnt+1, q[i].y)-X;
+    for (int i = 1; i <= m; i++) {
+        q[++tot].op = i; q[tot].x = gi();q[tot].y = gi();q[tot].z = gi();
+    }
+    div(1, n, 1, tot);
+    for (int i = 1; i <= m; i++)
+        printf("%d\n", X[ans[i]]);
+    return 0;
+}

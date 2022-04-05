@@ -1,0 +1,36 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+const int N = 105;
+int a[N][N], f[N][N][N];
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	cout.tie(0);
+	int m, n;
+	cin >> m >> n;
+	for (int i = 1; i <= m; i++)
+	{
+		for (int j = 1; j <= n; j++)
+		{
+			cin >> a[i][j];
+		}
+	}
+	for (int i = 1; i <= m + n - 1; i++)
+	{
+		for (int j = 1; j <= i && j <= m; j++)
+		{
+			for (int k = 1; k <= i && k <= m; k++)
+			{
+				f[i][j][k] = max(max(f[i - 1][j - 1][k - 1], f[i - 1][j - 1][k]), max(f[i - 1][j][k - 1], f[i - 1][j][k])) + a[j][i - j + 1] + a[k][i - k + 1];
+				if (j == k)
+				{
+					f[i][j][k] -= a[j][i - j + 1];
+				}
+			}
+		}
+	}
+	cout << f[m + n - 1][m][m] << endl;
+	return 0;
+}

@@ -1,0 +1,34 @@
+#include <iostream>
+#include <algorithm>
+#include <string.h>
+#define mod 1000000007
+using namespace std;
+int a[10000010] = { 0 };
+int tong[10] = { 0 };
+int main()
+{
+	memset(a, 0, sizeof(a));
+	memset(tong, 0, sizeof(tong));
+	int n;
+	cin >> n;
+	for (int i = 1; i <= n; i++)
+	{
+		cin >> a[i];
+		tong[a[i]]++;
+	}
+	int sum=tong[1]+tong[2]+tong[3]+tong[4];
+	cout << n - sum << endl << sum << endl;
+	if (n - sum > sum)
+	{
+		cout << "It's a good book!" << endl;
+	}
+	else if (n - sum == sum)
+	{
+		cout << "Just so-so!" << endl;
+	}
+	else
+	{
+		cout << "BengKui!" << endl;
+	}
+	return 0;
+}

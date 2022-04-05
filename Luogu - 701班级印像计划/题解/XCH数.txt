@@ -1,0 +1,72 @@
+#include <cstdlib>
+#include <iostream>
+#include <cstdio>
+#include <math.h>
+#include <cstring>
+#include <ctime>
+#define INF 2000000005
+#define lowbit(a) ((a)&-(a))
+inline long long max(long long a, long long b)
+{
+    return a > b ? a : b;
+}
+inline long long min(long long a, long long b)
+{
+    return a < b ? a : b;
+}
+#define FAIL -INF
+const long long NN = 6893911;
+long long p[NN], cnt;
+bool mark[NN];
+int pi[NN];
+void init()
+{
+    long long i, j;
+    for (i = 2; i < NN; i++)
+    {
+        if (!mark[i]) p[cnt++] = i;
+        pi[i] = pi[i - 1] + !mark[i];
+        for (j = 0; p[j] * i < NN && j < cnt; j++)
+        {
+            mark[p[j] * i] = true;
+            if (i%p[j] == 0) break;
+        }
+    }
+}
+int f(long long n, int m)
+{
+    if (n == 0) return 0;
+    if (m == 0) return n - n / 2;
+    return f(n, m - 1) - f(n / p[m], m - 1);
+}
+int prime(long long N);
+int p2(long long n, int m)
+{
+    int ans = 0;
+    for (int i = m + 1; (long long)p[i] * p[i] <= n; i++) ans += prime(n / p[i]) - prime(p[i]) + 1;
+    return ans;
+}
+int p3(long long n, int m)
+{
+    int ans = 0;
+    for (int i = m + 1; (long long)p[i] * p[i] * p[i] <= n; i++) ans += p2(n / p[i], i - 1);
+    return ans;
+}
+int prime(long long N)
+{
+    if (N < NN) return pi[N];
+    int lim = pow(N, 0.25) + 1;
+    int i;
+    for (i = 0; p[i] <= lim; i++);
+    int ans = i + f(N, i - 1) - 1 - p2(N, i - 1) - p3(N, i - 1);
+    return ans;
+}
+
+int main()
+{
+    long long L, R;
+    scanf("%lld%lld", &L, &R);
+    init();
+    printf("%d", prime(R) - prime(L-1));
+    return 0;
+}

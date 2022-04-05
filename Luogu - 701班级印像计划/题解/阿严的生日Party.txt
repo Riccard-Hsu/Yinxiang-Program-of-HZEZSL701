@@ -1,0 +1,25 @@
+#include<cstdio>
+#include<iostream>
+#include<string.h>
+using namespace std;
+#define ll long long int
+int main()
+{
+	ll n , m;
+	scanf("%d%d", &n, &m);
+	ll ans = 2, tmp = 2;
+	int f = 0;
+	n--;
+	while (n)
+	{
+		ans += tmp;
+		tmp += 2;
+		n--;
+	}
+	if (ans - m + 1>0) printf("%lld\n", ans - m + 1);
+	else
+	{
+		printf("N0\n");
+	}
+	return 0;
+}
